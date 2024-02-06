@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Chart.Name}}
+  labels:
+    app: {{.Chart.Name}}
+spec:
+  replicas: {{.Values.replicas}}
+  selector:
+    matchLabels:
+      app: {{.Chart.Name}}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 33%
+  template:
+    metadata:
+      labels:
+        app: {{.Chart.Name}}
+    spec:
+      containers:
+        - name: {{.Chart.Name}}
+          image: "{{.Values.image.name}}:{{.Values.image.tag}}"
+          ports:
+            - containerPort: {{.Values.server.port}}
+          env:
+            - name: NODE_ENV
+              value: "{{.Values.server.environment}}"
+            - name: PORT
+              value: "{{.Values.server.port}}"
+            - name: API_BASE
+              value: "{{.Values.server.api_base}}"
+            
+      imagePullSecrets:
+        - name: {{.Values.image.pullsecret}}

@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{.Values.issuer_prod.name}}
+spec:
+  acme:
+    # The ACME production api URL
+    server: {{.Values.issuer_prod.server}}
+
+    # Email address used for ACME registration
+    email: "{{.Values.issuer_prod.email}}"
+
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: {{.Values.issuer_prod.secret_name}}
+
+    # Enable the HTTP-01 challenge provider
+    solvers:
+      - http01:
+          ingress:
+            class: nginx

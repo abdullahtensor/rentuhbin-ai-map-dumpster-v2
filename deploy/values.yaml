@@ -1,0 +1,38 @@
+replicas: 1
+
+ingress:
+    domains:
+        - template.centrox.ai
+    secret_name: centrox-ai-fashion-labeling-tls
+    issuer: letsencrypt-prod
+    class: "nginx"
+
+service:
+    name: centrox-ai-fashion-labeling-service
+    ports:
+        target: 5000
+        port: 80
+        name: "80"
+
+issuer_stagging:
+    name: "letsencrypt-staging"
+    server: "https://acme-staging-v02.api.letsencrypt.org/directory"
+    email: "haris@centrox.ai"
+    secret_name: "letsencrypt-staging"
+
+issuer_prod:
+    name: "letsencrypt-prod"
+    server: "https://acme-v02.api.letsencrypt.org/directory"
+    email: "haris@centrox.ai"
+    secret_name: "letsencrypt-prod"
+
+image:
+    tag: latest
+    name: ""
+    pullsecret: gitlab-registry-secret
+
+server:
+    port: 5000
+    session_secret: ""
+    environment: production
+    api_base: "https://labeling.centrox.ai"

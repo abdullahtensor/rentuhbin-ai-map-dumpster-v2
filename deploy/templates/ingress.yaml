@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: "{{.Chart.Name}}-ingress"
+  annotations:
+    kubernetes.io/ingress.class: "{{.Values.ingress.class}}"
+    cert-manager.io/issuer: "{{.Values.ingress.issuer}}"
+
+spec:
+  tls:
+    - hosts:
+        - "{{index .Values.ingress.domains 0 }}"
+      secretName: "{{ .Values.ingress.secret_name }}"
+  rules:
+    - host: "{{index .Values.ingress.domains 0 }}"
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{.Values.service.name}}
+              servicePort: {{.Values.service.ports.port}}
